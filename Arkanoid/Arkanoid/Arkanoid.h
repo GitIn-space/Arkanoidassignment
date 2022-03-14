@@ -3,16 +3,22 @@
 #include <SDL.h>
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "GameObject.h"
 #include "Ball.h"
+#include "Paddle.h"
+#include "Block.h"
 
 class Arkanoid
 {
+#define WIDTH 800
+#define HEIGHT 600
 #define MOVESPEED 500
 
 public:
 	Arkanoid();
 	void Start();
+	void Remove(GameObject*);
 
 private:
 	void CalcFrameRate();
@@ -28,8 +34,10 @@ private:
 	bool left;
 	bool right;
 	SDL_Renderer* render;
-	GameObject* paddle;
+	Paddle* paddle;
 	GameObject* ball;
+	GameObject* leftWall;
+	GameObject* rightWall;
 	std::vector<GameObject*> renderQueue;
 	std::vector<GameObject*> updateQueue;
 	std::vector<GameObject*> physicsQueue;

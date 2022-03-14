@@ -3,7 +3,7 @@
 Arkanoid::Arkanoid()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_Window* wnd = SDL_CreateWindow("Arkanoid-look-alike", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
+	SDL_Window* wnd = SDL_CreateWindow("Arkanoid-look-alike", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, 0);
 	render = SDL_CreateRenderer(wnd, -1, SDL_RENDERER_ACCELERATED);
 
 	prevTicks = SDL_GetPerformanceCounter();
@@ -12,7 +12,7 @@ Arkanoid::Arkanoid()
 	left = false;
 	right = false;
 
-	paddle = new GameObject(0, 0, 255);
+	paddle = new Paddle(0, 0, 255);
 	renderQueue.push_back(paddle);
 	physicsQueue.push_back(paddle);
 
@@ -21,13 +21,18 @@ Arkanoid::Arkanoid()
 
 	renderQueue.push_back((new GameObject(232, 0, 254))->InitialMove(0, 0)->InitialDimensions(16, 600));
 	physicsQueue.push_back(renderQueue.back());
+	leftWall = renderQueue.back();
 
 	renderQueue.push_back((new GameObject(232, 0, 254))->InitialMove(784, 0)->InitialDimensions(16, 600));
 	physicsQueue.push_back(renderQueue.back());
+	rightWall = renderQueue.back();
 
 	ball = (new Ball(0, 255, 255))->InitialMove(350, 500)->InitialDimensions(16, 16);
 	renderQueue.push_back(ball);
 	updateQueue.push_back(ball);
+
+	renderQueue.push_back((new Block(255, 255, 0))->InitialHP(1)->InitialMove(0, HEIGHT / 2)->InitialDimensions(800, 16));
+	physicsQueue.push_back(renderQueue.back());
 }
 
 void Arkanoid::CalcFrameRate()
@@ -83,11 +88,14 @@ void Arkanoid::EventHandler()
 
 void Arkanoid::GameLogic()
 {
-	if (left)
+	if (left && !SDL_HasIntersection(paddle->GetRect(), leftWall->GetRect()))
 		paddle->MoveX(-(MOVESPEED * deltaTime));
 
-	if (right)
+	if (right && !SDL_HasIntersection(paddle->GetRect(), rightWall->GetRect()))
 		paddle->MoveX((MOVESPEED * deltaTime));
+
+	if (ball->GetRect()->y >= 600)
+		playing = false;
 }
 
 void Arkanoid::Physics()
@@ -113,7 +121,17 @@ void Arkanoid::Render()
 
 	SDL_RenderPresent(render);
 
-	SDL_Delay(16);
+	SDL_Delay(4);
+}
+
+void Arkanoid::Remove(GameObject* go)
+{
+	if (std::find(renderQueue.begin(), renderQueue.end(), go) != renderQueue.end())
+		renderQueue.erase(std::remove(renderQueue.begin(), renderQueue.end(), go));
+	if (std::find(updateQueue.begin(), updateQueue.end(), go) != updateQueue.end())
+		updateQueue.erase(std::remove(updateQueue.begin(), updateQueue.end(), go));
+	if (std::find(physicsQueue.begin(), physicsQueue.end(), go) != physicsQueue.end())
+		physicsQueue.erase(std::remove(physicsQueue.begin(), physicsQueue.end(), go));
 }
 
 void Arkanoid::Start()

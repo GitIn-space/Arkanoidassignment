@@ -7,6 +7,10 @@ GameObject::GameObject(Uint8 r, Uint8 g, Uint8 b)
 	this->b = b;
 
 	go = { 350, 550, 64, 16 };
+
+	centre = SDL_Point();
+	centre.x = go.w / 2;
+	centre.y = go.h / 2;
 }
 
 void GameObject::Render(SDL_Renderer* renderer)
@@ -18,6 +22,11 @@ void GameObject::Render(SDL_Renderer* renderer)
 SDL_Rect* GameObject::GetRect()
 {
 	return &go;
+}
+
+SDL_Point* GameObject::GetCentre()
+{
+	return &centre;
 }
 
 void GameObject::Update()
@@ -38,15 +47,13 @@ GameObject* GameObject::InitialDimensions(int w, int h)
 	go.w = w;
 	go.h = h;
 
+	centre.x = go.w / 2;
+	centre.y = go.h / 2;
+
 	return this;
 }
 
 void GameObject::Collision(GameObject* collider)
 {
 
-}
-
-void GameObject::MoveX(int x)
-{
-	go.x += x;
 }
