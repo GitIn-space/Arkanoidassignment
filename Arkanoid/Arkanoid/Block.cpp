@@ -11,7 +11,7 @@ void Block::Collision(GameObject* collider)
 	{
 		hp--;
 		if (hp <= 0)
-			delete this;
+			Arkanoid::getInstance().Remove(this);
 	}
 }
 

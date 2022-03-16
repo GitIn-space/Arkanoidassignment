@@ -2,6 +2,8 @@
 #define GAMEOBJECT_H
 #include <SDL.h>
 
+class Arkanoid;
+
 class GameObject
 {
 public:

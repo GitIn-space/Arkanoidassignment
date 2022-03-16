@@ -31,8 +31,17 @@ Arkanoid::Arkanoid()
 	renderQueue.push_back(ball);
 	updateQueue.push_back(ball);
 
-	renderQueue.push_back((new Block(255, 255, 0))->InitialHP(1)->InitialMove(0, HEIGHT / 2)->InitialDimensions(800, 16));
+	renderQueue.push_back((new Block(255, 255, 0))->InitialHP(1)->InitialMove(32, HEIGHT / 2)->InitialDimensions(64, 16));
 	physicsQueue.push_back(renderQueue.back());
+
+	renderQueue.push_back((new Block(255, 255, 0))->InitialHP(1)->InitialMove(128, HEIGHT / 2)->InitialDimensions(64, 16));
+	physicsQueue.push_back(renderQueue.back());
+}
+
+Arkanoid& Arkanoid::getInstance()
+{
+	static Arkanoid instance;
+	return instance;
 }
 
 void Arkanoid::CalcFrameRate()

@@ -16,11 +16,16 @@ class Arkanoid
 #define MOVESPEED 500
 
 public:
-	Arkanoid();
 	void Start();
 	void Remove(GameObject*);
 
+	static Arkanoid& getInstance();
+
+	Arkanoid(Arkanoid const&) = delete;
+	void operator=(Arkanoid const&) = delete;
+
 private:
+	Arkanoid();
 	void CalcFrameRate();
 	void EventHandler();
 	void GameLogic();

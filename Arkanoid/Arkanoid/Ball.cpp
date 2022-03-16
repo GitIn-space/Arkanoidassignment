@@ -2,8 +2,8 @@
 
 Ball::Ball(Uint8 r, Uint8 g, Uint8 b) : GameObject::GameObject(r, g, b)
 {
-	dirX = -1;
-	dirY = -1;
+	dirX = 1;
+	dirY = 1;
 }
 
 void Ball::Update()

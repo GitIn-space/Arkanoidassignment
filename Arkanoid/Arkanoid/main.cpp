@@ -2,8 +2,7 @@
 
 int main(int argc, char* args[])
 {
-	Arkanoid game{};
-	game.Start();
+	Arkanoid::getInstance().Start();
 
 	return 0;
 }
